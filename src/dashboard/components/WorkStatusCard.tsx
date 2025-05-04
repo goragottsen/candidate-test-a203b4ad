@@ -2,6 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { DashboardRootState, DashboardDispatch } from "../store";
 import { updateWorkStatus } from "../store/userSlice";
 import { WorkStatus } from "../../shared/types";
+import toast from "react-hot-toast"
+import PillButton from "./PillButton";
 
 export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
   const { profile } = useSelector((state: DashboardRootState) => state.user);
@@ -13,9 +15,11 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
     not_looking: "Don't want to hear about work",
   };
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(updateWorkStatus(e.target.value as WorkStatus));
+  const handleChange = (value: WorkStatus) => {
+    dispatch(updateWorkStatus(value));
+    toast.success("Availability updated!");
   };
+
 
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 h-full ${className}`}>
@@ -23,16 +27,23 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
         Your Work Status
       </h3>
       <div className="py-2">
-        <p>Update your availability for new opportunities:</p>
-        <select
-          value={profile.workStatus}
-          onChange={handleStatusChange}
-          className="w-full p-3 border border-gray-200 rounded-md my-4 text-base"
+        <p className="mb-4">Update your availability for new opportunities:</p>
+        <div 
+          role="radiogroup" 
+          aria-label="Work status" 
+          className="flex flex-wrap gap-2"
         >
-          <option value="looking">Currently looking for work</option>
-          <option value="passive">Passively looking for work</option>
-          <option value="not_looking">Don't want to hear about work</option>
-        </select>
+          {Object.entries(statusLabels).map(([value, label]) => (
+            <PillButton
+              key={value}
+              label={label}
+              isActive={profile.workStatus === value}
+              onClick={() => handleChange(value as WorkStatus)}
+              isHighlighted={false}
+              status={value as WorkStatus}
+            />
+          ))}
+        </div>
         <p className="mt-4 text-gray-500">
           Your current status:{" "}
           <strong>{statusLabels[profile.workStatus]}</strong>

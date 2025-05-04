@@ -40,6 +40,12 @@ body {
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
+
+  /* Custom colors*/
+  --success-light: #bbf7d0;
+  --info-color: #3b82f6;
+  --info-light: #bfdbfe;
+  --danger-light: #fecaca;
 }
 
 body {
