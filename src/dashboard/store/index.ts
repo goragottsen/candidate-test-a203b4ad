@@ -3,8 +3,10 @@ import userReducer, { updateWorkStatus } from "./userSlice";
 import {
   createSyncMiddleware,
   setupSyncListener,
-  SyncConfig,
 } from "../../shared/reduxSync";
+import {
+  SyncConfig,
+} from "../../shared/types";
 import type { WorkStatus } from "../../shared/types";
 
 // 1) Define what we’re syncing:

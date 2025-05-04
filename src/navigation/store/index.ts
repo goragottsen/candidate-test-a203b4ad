@@ -3,8 +3,10 @@ import userReducer, { updateWorkStatus } from "./userSlice";
 import {
   createSyncMiddleware,
   setupSyncListener,
-  SyncConfig,
 } from "../../shared/reduxSync";
+import {
+  SyncConfig,
+} from "../../shared/types";
 import type { WorkStatus } from "../../shared/types";
 
 // Re-use exactly the same channel name & action mapping:
