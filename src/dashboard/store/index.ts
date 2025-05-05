@@ -9,10 +9,10 @@ import {
 } from "../../shared/types";
 import type { WorkStatus } from "../../shared/types";
 
-// 1) Define what we’re syncing:
+// 1) Define what we’re syncing
 const workStatusSync: SyncConfig<WorkStatus> = {
-  channelName: "workStatus",                      // arbitrary but shared name
-  actionType: updateWorkStatus.type,              // e.g. "dashboardUser/updateWorkStatus"
+  channelName: "workStatus",
+  actionType: updateWorkStatus.type,
   recreateAction: (payload) => updateWorkStatus(payload),
 };
 
@@ -23,7 +23,7 @@ export const dashboardStore = configureStore({
     getDefault().concat(createSyncMiddleware(workStatusSync)),
 });
 
-// 3) Wire up the incoming channel:
+// 3) Wire up the incoming channel
 setupSyncListener(dashboardStore, workStatusSync);
 
 export type DashboardRootState = ReturnType<typeof dashboardStore.getState>;

@@ -9,10 +9,10 @@ import {
 } from "../../shared/types";
 import type { WorkStatus } from "../../shared/types";
 
-// Re-use exactly the same channel name & action mapping:
+// Reuse the same channel name & action mapping:
 const workStatusSync: SyncConfig<WorkStatus> = {
   channelName: "workStatus",
-  actionType: updateWorkStatus.type,         // now "navUser/updateWorkStatus"
+  actionType: updateWorkStatus.type,
   recreateAction: (payload) => updateWorkStatus(payload),
 };
 

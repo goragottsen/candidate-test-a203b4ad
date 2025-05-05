@@ -3,7 +3,7 @@ import { DashboardRootState, DashboardDispatch } from "../store";
 import { updateWorkStatus } from "../store/userSlice";
 import { WorkStatus } from "../../shared/types";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PillButton from "./PillButton";
 import dropdownArrow from "../../assets/dropdown-arrow.svg";
 
@@ -12,6 +12,20 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
   const { profile } = useSelector((state: DashboardRootState) => state.user);
   const dispatch = useDispatch<DashboardDispatch>();
   const [isEditing, setIsEditing] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsEditing(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const statusLabels: Record<WorkStatus, string> = {
     looking: "Currently looking for work",
@@ -22,7 +36,7 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
   const handleChange = (value: WorkStatus) => {
     if (value !== profile.workStatus) {
       dispatch(updateWorkStatus(value));
-      toast.success("Availability updated!");
+      toast.success("Work status updated!");
     }
     setIsEditing(false);
   };
@@ -32,7 +46,7 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
       <h3 className="text-lg font-medium mb-4 pb-3 border-b border-gray-200">
         Your Work Status
       </h3>
-      <div className="py-2">
+      <div className="py-2" ref={wrapperRef}>
         <p className="mb-4">Update your availability for new opportunities:</p>
 
         {!isEditing ? (
