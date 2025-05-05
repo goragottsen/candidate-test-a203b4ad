@@ -4,6 +4,7 @@ import { updateWorkStatus } from "../store/userSlice";
 import { WorkStatus } from "../../shared/types";
 import { useState } from "react";
 import toast from "react-hot-toast"
+import PillButton from "../../dashboard/components/PillButton";
 
 export const UserAvatar = () => {
   const { profile } = useSelector((state: NavRootState) => state.user);
@@ -30,7 +31,7 @@ export const UserAvatar = () => {
   return (
     <div className="relative">
       <div
-        className="flex items-center gap-3 cursor-pointer"
+        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-md p-1.5 transition-colors"
         onClick={() => setDropdownOpen(!dropdownOpen)}
       >
         <img
@@ -49,33 +50,32 @@ export const UserAvatar = () => {
       {dropdownOpen && (
         <>
         <div 
-          className="fixed inset-0"
+          className="fixed inset-0 z-10"
           onClick={handleClose}
         />
-        <div className="absolute bottom-full mb-2 left-0 bg-white shadow-lg rounded-md p-4 w-64 z-10 border border-gray-200">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">
-            Update your work status:
-          </h4>
-          <ul className="space-y-2">
-            <li
-              onClick={() => handleStatusChange("looking")}
-              className="text-sm py-1.5 px-2 hover:bg-gray-100 rounded cursor-pointer"
-            >
-              Currently looking for work
-            </li>
-            <li
-              onClick={() => handleStatusChange("passive")}
-              className="text-sm py-1.5 px-2 hover:bg-gray-100 rounded cursor-pointer"
-            >
-              Passively looking for work
-            </li>
-            <li
-              onClick={() => handleStatusChange("not_looking")}
-              className="text-sm py-1.5 px-2 hover:bg-gray-100 rounded cursor-pointer"
-            >
-              Don't want to hear about work
-            </li>
-          </ul>
+        <div
+          className="absolute bottom-full mb-1 left-0 bg-white shadow-lg rounded-md w-64 z-20 border border-gray-200"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="px-3 py-2 border-b border-gray-100">
+              <h4 className="text-sm font-medium text-gray-600">
+                Update your work status
+              </h4>
+            </div>
+            <div className="p-2">
+              <div className="flex flex-col gap-1">
+                {Object.entries(statusLabels).map(([value, label]) => (
+                  <PillButton
+                    key={value}
+                    label={label}
+                    isActive={profile.workStatus === value}
+                    onClick={() => handleStatusChange(value as WorkStatus)}
+                    isHighlighted={false}
+                    status={value as WorkStatus}
+                  />
+                ))}
+              </div>
+            </div>
         </div>
         </>
       )}

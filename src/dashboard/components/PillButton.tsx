@@ -47,9 +47,10 @@ const PillButton = ({
       rounded-md
       border
       cursor-pointer
-      flex justify-center items-center
+      flex items-center
       transition-all duration-200
       text-sm
+      w-full
       ${status ? getStatusStyles(status, isActive) : ''}
       ${isHighlighted ? 'font-medium' : 'font-normal'}
     `}
