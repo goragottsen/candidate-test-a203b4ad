@@ -62,7 +62,7 @@ export const UserAvatar = () => {
                 Update your work status
               </h4>
             </div>
-            <div className="p-2">
+            <div className="p-3">
               <div className="flex flex-col gap-1">
                 {Object.entries(statusLabels).map(([value, label]) => (
                   <PillButton
@@ -70,7 +70,6 @@ export const UserAvatar = () => {
                     label={label}
                     isActive={profile.workStatus === value}
                     onClick={() => handleStatusChange(value as WorkStatus)}
-                    isHighlighted={false}
                     status={value as WorkStatus}
                   />
                 ))}
