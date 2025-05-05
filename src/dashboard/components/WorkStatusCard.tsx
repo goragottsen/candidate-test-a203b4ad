@@ -20,7 +20,6 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
     toast.success("Availability updated!");
   };
 
-
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 h-full ${className}`}>
       <h3 className="text-lg font-medium mb-4 pb-3 border-b border-gray-200">

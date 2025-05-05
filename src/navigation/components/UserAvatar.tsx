@@ -3,6 +3,7 @@ import { NavRootState, NavDispatch } from "../store";
 import { updateWorkStatus } from "../store/userSlice";
 import { WorkStatus } from "../../shared/types";
 import { useState } from "react";
+import toast from "react-hot-toast"
 
 export const UserAvatar = () => {
   const { profile } = useSelector((state: NavRootState) => state.user);
@@ -18,6 +19,12 @@ export const UserAvatar = () => {
   const handleStatusChange = (status: WorkStatus) => {
     dispatch(updateWorkStatus(status));
     setDropdownOpen(false);
+    toast.success("Availability updated!");
+  };
+
+  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+      setDropdownOpen(false);
+      e.stopPropagation();
   };
 
   return (
@@ -40,7 +47,12 @@ export const UserAvatar = () => {
       </div>
 
       {dropdownOpen && (
-        <div className="absolute top-full mt-2 right-0 bg-white shadow-lg rounded-md p-4 w-64 z-10 border border-gray-200">
+        <>
+        <div 
+          className="fixed inset-0"
+          onClick={handleClose}
+        />
+        <div className="absolute bottom-full mb-2 left-0 bg-white shadow-lg rounded-md p-4 w-64 z-10 border border-gray-200">
           <h4 className="text-sm font-medium text-gray-700 mb-2">
             Update your work status:
           </h4>
@@ -65,6 +77,7 @@ export const UserAvatar = () => {
             </li>
           </ul>
         </div>
+        </>
       )}
     </div>
   );
