@@ -5,7 +5,7 @@ import { StoreSyncManager } from "../../shared/storeSync";
 const syncManager = StoreSyncManager.getInstance();
 
 syncManager.configure({
-  actionTypes: ['/updateWorkStatus'], // Multiple action types can be set here
+  actionTypes: ['/updateWorkStatus'], // Multiple action types to be set here
   sourcePrefix: 'dashboard',
   targetPrefix: 'nav'
 });
