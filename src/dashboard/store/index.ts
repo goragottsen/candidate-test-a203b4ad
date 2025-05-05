@@ -1,30 +1,34 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer, { updateWorkStatus } from "./userSlice";
-import {
-  createSyncMiddleware,
-  setupSyncListener,
-} from "../../shared/reduxSync";
-import {
-  SyncConfig,
-} from "../../shared/types";
-import type { WorkStatus } from "../../shared/types";
+import userReducer from "./userSlice";
+import { StoreSyncManager } from "../../shared/storeSync";
 
-// 1) Define what we’re syncing
-const workStatusSync: SyncConfig<WorkStatus> = {
-  channelName: "workStatus",
-  actionType: updateWorkStatus.type,
-  recreateAction: (payload) => updateWorkStatus(payload),
-};
+const syncManager = StoreSyncManager.getInstance();
 
-// 2) Add the middleware, then call the listener
-export const dashboardStore = configureStore({
-  reducer: { user: userReducer },
-  middleware: (getDefault) =>
-    getDefault().concat(createSyncMiddleware(workStatusSync)),
+syncManager.configure({
+  actionTypes: ['/updateWorkStatus'], // Multiple action types can be set here
+  sourcePrefix: 'dashboard',
+  targetPrefix: 'nav'
 });
 
-// 3) Wire up the incoming channel
-setupSyncListener(dashboardStore, workStatusSync);
+// Subscribe to updates
+syncManager.subscribe((event) => {
+  if (event.meta?.originalSource === 'nav') {
+      const newType = event.type.replace('nav', 'dashboard');
+      dashboardStore.dispatch({ 
+          type: newType,
+          payload: event.payload,
+          meta: { isSync: true }
+      });
+  }
+});
+
+export const dashboardStore = configureStore({
+  reducer: {
+    user: userReducer,
+  },
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware().concat(syncManager.createSyncMiddleware('dashboard'))
+});
 
 export type DashboardRootState = ReturnType<typeof dashboardStore.getState>;
 export type DashboardDispatch = typeof dashboardStore.dispatch;

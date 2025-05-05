@@ -5,22 +5,17 @@ import { WorkStatus } from "../../shared/types";
 import { useState } from "react";
 import toast from "react-hot-toast"
 import PillButton from "../../dashboard/components/PillButton";
+import { statusLabels } from "../../shared/models/statusLabels";
 
 export const UserAvatar = () => {
   const { profile } = useSelector((state: NavRootState) => state.user);
   const dispatch = useDispatch<NavDispatch>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const statusLabels: Record<WorkStatus, string> = {
-    looking: "Currently looking for work",
-    passive: "Passively looking for work",
-    not_looking: "Don't want to hear about work",
-  };
-
   const handleStatusChange = (status: WorkStatus) => {
     dispatch(updateWorkStatus(status));
     setDropdownOpen(false);
-    toast.success("Availability updated!");
+    toast.success("Work status updated!");
   };
 
   const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {

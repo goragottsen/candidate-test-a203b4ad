@@ -1,28 +1,33 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer, { updateWorkStatus } from "./userSlice";
-import {
-  createSyncMiddleware,
-  setupSyncListener,
-} from "../../shared/reduxSync";
-import {
-  SyncConfig,
-} from "../../shared/types";
-import type { WorkStatus } from "../../shared/types";
+import userReducer from "./userSlice";
+import { StoreSyncManager } from "../../shared/storeSync";
 
-// Reuse the same channel name & action mapping:
-const workStatusSync: SyncConfig<WorkStatus> = {
-  channelName: "workStatus",
-  actionType: updateWorkStatus.type,
-  recreateAction: (payload) => updateWorkStatus(payload),
-};
+const syncManager = StoreSyncManager.getInstance();
 
-export const navStore = configureStore({
-  reducer: { user: userReducer },
-  middleware: (getDefault) =>
-    getDefault().concat(createSyncMiddleware(workStatusSync)),
+syncManager.configure({
+  actionTypes: ['/updateWorkStatus'], // Multiple action types can be set here
+  sourcePrefix: 'nav',
+  targetPrefix: 'dashboard'
 });
 
-setupSyncListener(navStore, workStatusSync);
+syncManager.subscribe((event) => {
+  if (event.meta?.originalSource === 'dashboard') {
+      const newType = event.type.replace('dashboard', 'nav');
+      navStore.dispatch({ 
+          type: newType,
+          payload: event.payload,
+          meta: { isSync: true }
+      });
+  }
+});
+
+export const navStore = configureStore({
+  reducer: {
+    user: userReducer,
+  },
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware().concat(syncManager.createSyncMiddleware('nav'))
+});
 
 export type NavRootState = ReturnType<typeof navStore.getState>;
 export type NavDispatch = typeof navStore.dispatch;

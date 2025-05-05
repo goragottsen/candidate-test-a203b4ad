@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import PillButton from "./PillButton";
 import dropdownArrow from "../../assets/dropdown-arrow.svg";
+import { statusLabels } from "../../shared/models/statusLabels";
 
 
 export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
@@ -15,23 +16,19 @@ export const WorkStatusCard = ({ className = "" }: { className?: string }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Click outside handler
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsEditing(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
+    
+    // Cleanup listener
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  const statusLabels: Record<WorkStatus, string> = {
-    looking: "Currently looking for work",
-    passive: "Passively looking for work",
-    not_looking: "Don't want to hear about work",
-  };
 
   const handleChange = (value: WorkStatus) => {
     if (value !== profile.workStatus) {

@@ -14,8 +14,14 @@ export const userSlice = createSlice({
   name: "dashboardUser",
   initialState,
   reducers: {
-    updateWorkStatus: (state, action: PayloadAction<WorkStatus>) => {
-      state.profile.workStatus = action.payload;
+    updateWorkStatus: {
+      reducer: (state, action: PayloadAction<WorkStatus>) => {
+        state.profile.workStatus = action.payload;
+      },
+      prepare: (status: WorkStatus) => ({
+        payload: status,
+        meta: { source: 'dashboard' }
+      })
     },
   },
 });

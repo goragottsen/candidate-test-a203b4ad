@@ -9,19 +9,17 @@ export interface UserProfile {
   workStatus: WorkStatus;
 }
 
-export interface SyncableAction<T> extends UnknownAction {
-  payload: T;
+export interface SyncableAction extends UnknownAction {
+  payload: any;
   meta?: {
     remote?: boolean;
+    isSync?: boolean;
+    fromSync?: boolean;
   };
 }
 
-export interface ChannelMessage<T> {
-  payload: T;
-}
-
-export interface SyncConfig<T> {
-  channelName: string;
-  actionType: string;
-  recreateAction: (payload: T) => SyncableAction<T>;
+export interface SyncConfig {
+  actionTypes: string[]; // Array of action types to sync
+  sourcePrefix: string;  // e.g., 'nav', 'dashboard'
+  targetPrefix: string; // e.g., 'nav', 'dashboard'
 }
