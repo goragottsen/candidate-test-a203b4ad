@@ -12,9 +12,8 @@ export interface UserProfile {
 export interface SyncableAction extends UnknownAction {
   payload: any;
   meta?: {
-    remote?: boolean;
     isSync?: boolean;
-    fromSync?: boolean;
+    originalSource?: string;
   };
 }
 

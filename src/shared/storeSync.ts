@@ -1,19 +1,9 @@
 import { SyncableAction, SyncConfig } from "./types";
 import type { Dispatch, Middleware } from "redux";
 
-type StoreEvent = {
-    type: string;
-    payload: any;
-    meta?: {
-        isSync?: boolean;
-        fromSync?: boolean;
-        originalSource?: string;
-    };
-  };
-  
-export class StoreSyncManager {
+export class StoreSyncManager <T extends SyncableAction = SyncableAction> {
     private static instance: StoreSyncManager;
-    private subscribers: ((event: StoreEvent) => void)[] = [];
+    private subscribers: ((event: T) => void)[] = [];
     private config!: SyncConfig;
   
     private constructor() {}
@@ -29,22 +19,22 @@ export class StoreSyncManager {
         this.config = config;
     }
   
-    publish(event: StoreEvent): void {
+    publish(event: T): void {
         this.subscribers.forEach(subscriber => subscriber(event));
     }
   
-    subscribe(callback: (event: StoreEvent) => void): () => void {
+    subscribe(callback: (event: T) => void): () => void {
         this.subscribers.push(callback);
         return () => {
             this.subscribers = this.subscribers.filter(sub => sub !== callback);
         };
     }
 
-    createSyncMiddleware(source: string): Middleware<{}, any, Dispatch<SyncableAction>> {
+    createSyncMiddleware(source: string): Middleware<{}, any, Dispatch<T>> {
         return () => (next) => (action) => {
             const result = next(action);
             
-            const syncableAction = action as SyncableAction;
+            const syncableAction = action as T;
             const shouldSync = this.config.actionTypes.some(type => 
                 syncableAction.type.endsWith(type) && 
                 !syncableAction.meta?.isSync
@@ -57,7 +47,7 @@ export class StoreSyncManager {
                     meta: { 
                         originalSource: source 
                     }
-                });
+                } as T);
             }
             
             return result;
