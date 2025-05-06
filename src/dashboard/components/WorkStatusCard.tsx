@@ -4,7 +4,7 @@ import { updateWorkStatus } from "../store/userSlice";
 import { WorkStatus } from "../../shared/types";
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import PillButton from "./PillButton";
+import PillButton from "../../shared/components/PillButton";
 import dropdownArrow from "../../assets/dropdown-arrow.svg";
 import { statusLabels } from "../../shared/models/statusLabels";
 

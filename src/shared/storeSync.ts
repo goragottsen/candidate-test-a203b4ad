@@ -5,9 +5,9 @@ export class StoreSyncManager <T extends SyncableAction = SyncableAction> {
     private static instance: StoreSyncManager;
     private subscribers: ((event: T) => void)[] = [];
     private config!: SyncConfig;
-  
+
     private constructor() {}
-  
+
     static getInstance(): StoreSyncManager {
         if (!StoreSyncManager.instance) {
             StoreSyncManager.instance = new StoreSyncManager();
@@ -18,11 +18,11 @@ export class StoreSyncManager <T extends SyncableAction = SyncableAction> {
     configure(config: SyncConfig): void {
         this.config = config;
     }
-  
+
     publish(event: T): void {
         this.subscribers.forEach(subscriber => subscriber(event));
     }
-  
+
     subscribe(callback: (event: T) => void): () => void {
         this.subscribers.push(callback);
         return () => {

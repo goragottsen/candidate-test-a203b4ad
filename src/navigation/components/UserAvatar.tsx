@@ -4,7 +4,7 @@ import { updateWorkStatus } from "../store/userSlice";
 import { WorkStatus } from "../../shared/types";
 import { useState } from "react";
 import toast from "react-hot-toast"
-import PillButton from "../../dashboard/components/PillButton";
+import PillButton from "../../shared/components/PillButton";
 import { statusLabels } from "../../shared/models/statusLabels";
 
 export const UserAvatar = () => {
@@ -26,7 +26,7 @@ export const UserAvatar = () => {
   return (
     <div className="relative">
       <div
-        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-md p-1.5 transition-colors"
+        className="flex items-center gap-2 cursor-pointer"
         onClick={() => setDropdownOpen(!dropdownOpen)}
       >
         <img

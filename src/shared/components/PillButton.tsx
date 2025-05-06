@@ -1,4 +1,4 @@
-import { WorkStatus } from "../../shared/types";
+import { WorkStatus } from "../types";
 
 interface PillButtonProps {
   label: string|React.ReactNode;
