@@ -12,19 +12,19 @@ const getStatusStyles = (status: WorkStatus, isActive: boolean) => {
       case 'looking':
         return isActive 
           ? 'bg-[var(--success-color)] text-white font-semibold border-2 border-[var(--success-color)]' 
-          : 'bg-[color-mix(in_srgb,var(--success-color)_5%,white)] border-transparent';
+          : 'bg-[color-mix(in_srgb,var(--success-color)_10%,white)] border-transparent';
       case 'passive':
         return isActive 
           ? 'bg-[var(--info-color)] text-white border-2 font-semibold border-[var(--info-color)]' 
-          : 'bg-[color-mix(in_srgb,var(--info-color)_5%,white)] border-transparent';
+          : 'bg-[color-mix(in_srgb,var(--info-color)_10%,white)] border-transparent';
       case 'not_looking':
         return isActive 
           ? 'bg-[var(--danger-color)] text-white border-2 font-semibold border-[var(--danger-color)]' 
-          : 'bg-[color-mix(in_srgb,var(--danger-color)_5%,white)] border-transparent';
+          : 'bg-[color-mix(in_srgb,var(--danger-color)_10%,white)] border-transparent';
       default:
         return isActive 
-          ? 'bg-gray-50 border-2 border-gray-500' 
-          : 'bg-gray-50 border-transparent';
+          ? 'bg-gray-500 text-white border-2 border-gray-500' 
+          : 'bg-[color-mix(in_srgb,gray-50_10%,white)] border-transparent text-gray-500';
     }
   };
 
